@@ -1,6 +1,8 @@
 import tornado, asyncio
 
 from app_backend.db import COOKIE_SECRET, PORT
+from app_backend.handlers.auth import RegisterHandler, LoginHandler, LogoutHandler
+from app_backend.handlers.messages import MessagesHandler, MessageDeleteHandler
 
 def make_app():
     return tornado.web.Application(
@@ -10,7 +12,7 @@ def make_app():
             (r"/api/logout", LogoutHandler),
 
             (r"/api/messages", MessagesHandler),
-            (r"/api/messages/([a-f0-9]{24})/delete", MessageDeleteHandler),
+            (r"/api/messages/([a-f0-9]{24})", MessageDeleteHandler),
 
             (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "static"}),
 
