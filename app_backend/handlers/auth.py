@@ -1,7 +1,7 @@
 import tornado.web
 import tornado.escape
 import bcrypt
-from db import users, BaseHandler
+from app_backend.db import users, BaseHandler
 
 class RegisterHandler(BaseHandler):
     async def post(self):
