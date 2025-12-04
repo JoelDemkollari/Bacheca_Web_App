@@ -16,7 +16,7 @@ def make_app():
 
             (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "static"}),
 
-            (r"/", tornado.web.RedirectHandler, {"url": "/static/login.html"}),        
+            (r"/", tornado.web.RedirectHandler, {"url": "static/register.html"}),
         ],
         cookie_secret=COOKIE_SECRET,
         autoreload=True,

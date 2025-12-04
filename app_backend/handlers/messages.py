@@ -1,14 +1,14 @@
 import tornado.escape
 from bson import ObjectId
-from db import tasks, BaseHandler
+from app_backend.db import messages, BaseHandler
 
-class TasksHandler(BaseHandler):
+class MessagesHandler(BaseHandler):
     async def get(self):
         user = self.get_current_user()
         if not user:
             return self.write_json({"error": "Non autenticato"}, 401)
 
-        cursor = tasks.find({})
+        cursor = messages.find({})
         out = []
         async for t in cursor:
             out.append({
@@ -30,7 +30,7 @@ class TasksHandler(BaseHandler):
         if not text:
             return self.write_json({"error": "Testo obbligatorio"}, 400)
 
-        result = await tasks.insert_one({
+        result = await messages.insert_one({
             "user_id": ObjectId(user["id"]),
             "text": text,
             "done": False
@@ -38,13 +38,13 @@ class TasksHandler(BaseHandler):
 
         return self.write_json({"id": str(result.inserted_id)}, 201)
 
-class TaskDeleteHandler(BaseHandler):
+class MessageDeleteHandler(BaseHandler):
     async def delete(self, task_id):
         user = self.get_current_user()
         if not user:
             return self.write_json({"error": "Non autenticato"}, 401)
 
-        await tasks.delete_one({
+        await messages.delete_one({
             "_id": ObjectId(task_id),
             "user_id": ObjectId(user["id"])
         })
