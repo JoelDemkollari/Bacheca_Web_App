@@ -14,7 +14,6 @@ class MessagesHandler(BaseHandler):
             out.append({
                 "id": str(t["_id"]),
                 "text": t["text"],
-                "done": t["done"]
             })
 
         return self.write_json({"items": out})
@@ -33,7 +32,6 @@ class MessagesHandler(BaseHandler):
         result = await messages.insert_one({
             "user_id": ObjectId(user["id"]),
             "text": text,
-            "done": False
         })
 
         return self.write_json({"id": str(result.inserted_id)}, 201)

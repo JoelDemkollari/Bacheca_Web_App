@@ -11,7 +11,7 @@ async function login() {
   const data = await res.json();
   alert(data.message || data.error);
 
-  if (res.status === 200) location.href = "tasks.html";
+  if (res.status === 200) location.href = "bacheca.html";
 }
 
 async function registerUser() {
@@ -35,8 +35,8 @@ async function logout() {
   location.href = "login.html";
 }
 
-async function loadTasks() {
-  const res = await fetch("/api/tasks");
+async function loadMessages() {
+  const res = await fetch("/api/messages");
 
   if (res.status !== 200) {
     location.href = "login.html";
@@ -44,12 +44,11 @@ async function loadTasks() {
   }
 
   const data = await res.json();
-  const list = document.getElementById("taskList");
+  const list = document.getElementById("messageList");
   list.innerHTML = "";
 
   data.items.forEach((t) => {
     const li = document.createElement("li");
-    li.className = t.done ? "done" : "";
 
     // Testo
     const textSpan = document.createElement("span");
@@ -58,21 +57,14 @@ async function loadTasks() {
     // Area icone
     const actions = document.createElement("div");
 
-    // ✓ / ↺ icona
-    const toggle = document.createElement("button");
-    toggle.className = "icon-btn";
-    toggle.innerHTML = t.done
-      ? '<i class="fa-solid fa-rotate-left" title="Segna come incompleta"></i>'
-      : '<i class="fa-solid fa-check" title="Completa"></i>';
-    toggle.onclick = () => updateTask(t.id, !t.done);
-
     // 🗑 icona
     const del = document.createElement("button");
     del.className = "icon-btn";
-    del.innerHTML = '<i class="fa-solid fa-trash" title="Elimina"></i>';
-    del.onclick = () => deleteTask(t.id);
+    del.innerHTML =
+      '<input type="image" src="icons/trash-icon.png" width="50px" height="50px" title="Elimina">';
+    del.onclick = () => deleteMessage(t.id);
 
-    actions.appendChild(toggle);
+    //actions.appendChild(toggle);
     actions.appendChild(del);
 
     li.appendChild(textSpan);
@@ -81,21 +73,21 @@ async function loadTasks() {
   });
 }
 
-async function addTask() {
-  const text = document.getElementById("taskText").value;
+async function addMessage() {
+  const text = document.getElementById("messageText").value;
 
-  await fetch("/api/tasks", {
+  await fetch("/api/messages", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text }),
   });
 
-  loadTasks();
+  loadMessages();
 }
 
-async function deleteTask(id) {
-  await fetch(`/api/tasks/${id}/delete`, { method: "DELETE" });
-  loadTasks();
+async function deleteMessage(id) {
+  await fetch(`/api/messages/${id}`, { method: "DELETE" });
+  loadMessages();
 }
 
-if (location.pathname.endsWith("tasks.html")) loadTasks();
+if (location.pathname.endsWith("bacheca.html")) loadMessages();

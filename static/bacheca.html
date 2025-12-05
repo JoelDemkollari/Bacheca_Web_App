@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Le mie Task</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- ICONS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="wrapper">
+      <h2>Messaggi</h2>
+
+      <ul id="messageList"></ul>
+
+      <div class="container">
+        <input id="messageText" placeholder="Nuova task..." />
+        <button onclick="addMessage()">➕ Aggiungi</button>
+        <button onclick="logout()" class="logout">Logout</button>
+      </div>
+    </div>
+
+    <script src="script/app.js"></script>
+  </body>
+</html>
