@@ -49,27 +49,34 @@ async function loadMessages() {
 
   data.items.forEach((t) => {
     const li = document.createElement("li");
+    li.className = "message";
 
-    // Testo
-    const textSpan = document.createElement("span");
-    textSpan.textContent = t.text;
+    li.innerHTML = `
+    <div class="message-left">
+      <div class="message-header">
+        <span class="message-user">${t.email}</span>
+        <span class="message-time">${t.time}</span>
+      </div>
 
-    // Area icone
-    const actions = document.createElement("div");
+      <div class="message-text">
+        ${escapeHtml(t.text)}
+      </div>
+    </div>
 
-    // 🗑 icona
-    const del = document.createElement("button");
-    del.className = "icon-btn";
-    del.innerHTML =
-      '<input type="image" src="icons/trash-icon.png" width="50px" height="50px" title="Elimina">';
-    del.onclick = () => deleteMessage(t.id);
+    ${
+      t.can_delete
+        ? `<button class="icon-btn delete-btn" title="Elimina">
+             <i class="fa-solid fa-trash"></i>
+           </button>`
+        : ""
+    }
+  `;
 
-    //actions.appendChild(toggle);
-    actions.appendChild(del);
+    if (t.can_delete) {
+      li.querySelector(".delete-btn").onclick = () => deleteMessage(t.id);
+    }
 
-    li.appendChild(textSpan);
-    li.appendChild(actions);
-    list.appendChild(li);
+    document.getElementById("messageList").appendChild(li);
   });
 }
 
@@ -91,3 +98,10 @@ async function deleteMessage(id) {
 }
 
 if (location.pathname.endsWith("bacheca.html")) loadMessages();
+
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
